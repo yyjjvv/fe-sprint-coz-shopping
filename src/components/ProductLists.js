@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 // dependencies
 import styled from "styled-components";
 // components
@@ -12,35 +13,56 @@ export const ListsContainer = styled.section`
     }
     ul {
         display: flex;
-        justify-content: space-between;
+        /* justify-content: space-between; */
     }
 `;
 
-const ProductLists = ({ products, isLoading }) => {
-    const productArr = products.slice(0, 4);
-    console.log(productArr);
+const ProductLists = ({ setProducts }) => {
+    const [isLoading, setIsLoading] = useState(true);
+    const [productList, setProductList] = useState([]);
+
+    const getRequestProductList = () => {
+        return fetch(
+            "http://cozshopping.codestates-seb.link/api/v1/products?count=4"
+        )
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error(response.statusText);
+                }
+                return response.json();
+            })
+            .then((data) => {
+                setIsLoading(true);
+                setProductList(data);
+                setIsLoading(false);
+            })
+            .catch((error) => console.error(error));
+    };
+
+    useEffect(() => {
+        getRequestProductList();
+    }, []);
+
     return (
         <ListsContainer>
             <h2>상품 리스트</h2>
             <ul>
-                {productArr.map((item) => (
+                {productList.map((item) => (
                     <ProductItem
                         key={item.id}
                         id={item.id}
                         type={item.type}
                         title={item.title}
-                        // brandName={item.brandName}
                         brandName={item["brand_name"]}
-                        // subTitle={item.subTitle}
                         subTitle={item["sub_title"]}
-                        // imgUrl={item.imgUrl}
                         imgUrl={item["image_url"]}
-                        // brandImgUrl={item.brandImgUrl}
                         brandImgUrl={item["brand_image_url"]}
                         price={item.price}
                         discountPercentage={item.discountPercentage}
                         follower={item.follower}
+                        bookmark={item.bookmark}
                         isLoading={isLoading}
+                        setProducts={setProducts}
                     />
                 ))}
             </ul>

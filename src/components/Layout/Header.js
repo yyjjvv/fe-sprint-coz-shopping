@@ -9,14 +9,18 @@ import { Bars3Icon } from "@heroicons/react/24/solid";
 import logo from "../../assets/logo.png";
 
 export const HeaderContainer = styled.header`
-    position: sticky;
+    position: fixed;
+    top: 0;
     display: flex;
     justify-content: center;
     align-items: center;
+    width: 100%;
     height: 8rem;
+    background-color: #ffffff;
     box-shadow: 0px 8px 8px rgba(0, 0, 0, 0.1);
     -webkit-box-shadow: 0px 8px 8px rgba(0, 0, 0, 0.1);
     -moz-box-shadow: 0px 8px 8px rgba(0, 0, 0, 0.1);
+    z-index: 5;
     .header-wrapper {
         position: relative;
         display: flex;

@@ -1,30 +1,23 @@
 import { useState } from "react";
+// dependencies
 import styled from "styled-components";
 import { StarIcon } from "@heroicons/react/24/solid";
 
 export const ItemContainer = styled.li`
     width: calc((100% - 7.2rem) / 4);
+    &:not(:first-of-type) {
+        margin-left: 2.4rem;
+    }
     .img-area {
         position: relative;
         height: 21rem;
         min-height: 21rem;
         border-radius: 1.2rem;
     }
-    input[type="checkbox"] {
-        display: none;
-    }
-    label {
+    button {
         position: absolute;
         bottom: 12px;
         right: 12px;
-        svg {
-            fill: rgba(223, 223, 223, 0.81);
-        }
-    }
-    input[type="checkbox"]:checked + label {
-        svg {
-            fill: #ffd361;
-        }
     }
 
     .dec-area {
@@ -58,7 +51,8 @@ export const ItemContainer = styled.li`
 `;
 
 const ProductItem = (props) => {
-    const [bookmark, setBookmark] = useState(false);
+    const [bookmark, setBookmark] = useState(props.bookmark);
+
     return (
         <ItemContainer>
             <div
@@ -71,14 +65,27 @@ const ProductItem = (props) => {
                     backgroundSize: "cover",
                 }}
             >
-                <input
-                    type="checkbox"
-                    id={props.title}
-                    onChange={() => setBookmark(!bookmark)}
-                />
-                <label htmlFor={props.title}>
-                    <StarIcon width={24} height={24} />
-                </label>
+                <button
+                    type="button"
+                    onClick={() => {
+                        setBookmark((prev) => !prev);
+                        props.setProducts((prevState) =>
+                            prevState.map((item) =>
+                                item.id === props.id
+                                    ? { ...item, bookmark: !item.bookmark }
+                                    : item
+                            )
+                        );
+                    }}
+                >
+                    <StarIcon
+                        width={24}
+                        height={24}
+                        fill={
+                            bookmark ? "#ffd361" : "rgba(223, 223, 223, 0.81)"
+                        }
+                    />
+                </button>
             </div>
             <div className="dec-area">
                 <div className="dec-left">

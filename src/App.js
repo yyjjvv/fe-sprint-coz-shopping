@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-
+// custom hooks
+import useLocalStorage from "./hooks/useLocalStorage";
 // components
 import Header from "./components/Layout/Header";
 import Footer from "./components/Layout/Footer";
@@ -12,9 +13,8 @@ import Bookmark from "./pages/Bookmark";
 import "./App.css";
 
 const App = () => {
-    const [products, setProducts] = useState([]);
+    const [products, setProducts] = useLocalStorage("bookmarkLists", []);
     const [isLoading, setIsLoading] = useState(true);
-    // const [httpError, setHttpError] = useState();
 
     useEffect(() => {
         getProducts();
@@ -25,58 +25,11 @@ const App = () => {
             .then((res) => res.json())
             .then((data) => {
                 setIsLoading(true);
-                setProducts(data);
+                setProducts(data.map((item) => ({ ...item, bookmark: false })));
                 setIsLoading(false);
             });
     };
     console.log(products);
-    // useEffect(() => {
-    //     const fetchProducts = async () => {
-    //         const response = await fetch(
-    //             "http://cozshopping.codestates-seb.link/api/v1/products"
-    //         );
-    //         if (!response.ok) {
-    //             throw new Error("Something went wrong!");
-    //         }
-    //         const responseData = await response.json();
-    //         const loadedProducts = [];
-    //         for (const key in responseData) {
-    //             loadedProducts.push({
-    //                 id: responseData[key].id,
-    //                 type: responseData[key].type,
-    //                 title: responseData[key].title,
-    //                 subTitle: responseData[key]["sub_title"],
-    //                 brandName: responseData[key]["brand_name"],
-    //                 price: responseData[key].price,
-    //                 discountPercentage: responseData[key].discountPercentage,
-    //                 imgUrl: responseData[key]["image_url"],
-    //                 brandImgUrl: responseData[key]["brand_image_url"],
-    //                 follower: responseData[key].follower,
-    //             });
-    //         }
-    //         setProducts(loadedProducts);
-    //         setIsLoading(false);
-    //     };
-    //     fetchProducts().catch(() => {
-    //         setIsLoading(false);
-    //         setHttpError(products[0].message);
-    //     });
-    // }, []);
-
-    // if (isLoading) {
-    //     return (
-    //         <section>
-    //             <p>Loading...</p>
-    //         </section>
-    //     );
-    // }
-    // if (httpError) {
-    //     return (
-    //         <section>
-    //             <p>{httpError}</p>
-    //         </section>
-    //     );
-    // }
 
     return (
         <BrowserRouter>
@@ -86,7 +39,11 @@ const App = () => {
                     <Route
                         path="/"
                         element={
-                            <Main products={products} isLoading={isLoading} />
+                            <Main
+                                products={products}
+                                setProducts={setProducts}
+                                isLoading={isLoading}
+                            />
                         }
                     />
                     <Route
