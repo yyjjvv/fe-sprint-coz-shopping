@@ -3,7 +3,12 @@ import ProductItem from "./ProductItem";
 // styles
 import styles from "./ProductLists.module.css";
 
-const ProductLists = ({ productLists, bookmarkLists, setBookmarkLists }) => {
+const ProductLists = ({
+    productLists,
+    bookmarkLists,
+    setBookmarkLists,
+    showToast,
+}) => {
     const handleBookmark = (item) => {
         if (bookmarkLists) {
             return bookmarkLists.some((x) => x.id === item.id);
@@ -23,6 +28,7 @@ const ProductLists = ({ productLists, bookmarkLists, setBookmarkLists }) => {
                         handleBookmark={handleBookmark(item)}
                         bookmarkLists={bookmarkLists}
                         setBookmarkLists={setBookmarkLists}
+                        showToast={showToast}
                     />
                 ))}
             </ul>

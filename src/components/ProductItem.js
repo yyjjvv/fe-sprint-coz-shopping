@@ -6,7 +6,7 @@ import Modal from "./UI/Modal";
 // styles
 import styles from "./ProductItem.module.css";
 
-const ProductItem = ({ item, bookmarkLists, setBookmarkLists }) => {
+const ProductItem = ({ item, bookmarkLists, setBookmarkLists, showToast }) => {
     const [isBookmarked, setIsBookmarked] = useState(false);
     const [isVisible, setIsVisible] = useState(false);
 
@@ -33,6 +33,7 @@ const ProductItem = ({ item, bookmarkLists, setBookmarkLists }) => {
     const handleToggleBookmark = (e) => {
         e.stopPropagation();
         setIsBookmarked((prev) => !prev);
+        showToast(!isBookmarked);
         const bookmark = bookmarkLists || [];
         const isExistingItem =
             bookmark.findIndex((data) => data.id === item.id) !== -1;
@@ -60,69 +61,7 @@ const ProductItem = ({ item, bookmarkLists, setBookmarkLists }) => {
     }, [bookmarkLists, item.id]);
 
     return (
-        <li className={styles["product-list"]} onClick={handleShowModal}>
-            <div
-                className={styles["img-area"]}
-                title={item.title}
-                style={{
-                    background: `url(${
-                        item.image_url ? item.image_url : item.brand_image_url
-                    }) no-repeat center`,
-                    backgroundSize: "cover",
-                }}
-            >
-                <button
-                    type="button"
-                    className={styles.bookmark}
-                    onClick={(e) => {
-                        handleToggleBookmark(e);
-                    }}
-                >
-                    <StarIcon
-                        width={24}
-                        height={24}
-                        fill={
-                            isBookmarked
-                                ? "#ffd361"
-                                : "rgba(223, 223, 223, 0.81)"
-                        }
-                    />
-                </button>
-            </div>
-            <div className={styles["dec-area"]}>
-                <div className={styles["dec-left"]}>
-                    <h3>
-                        {item.type === CATEGORY
-                            ? "# " + item.title
-                            : item.type === BRAND
-                            ? item.brand_name
-                            : item.title}
-                    </h3>
-                    <p>{item.type === EXHIBITION ? item.sub_title : ""}</p>
-                </div>
-                {(item.type === PRODUCT || item.type === BRAND) && (
-                    <div className={styles["dec-right"]}>
-                        <strong
-                            style={
-                                item.type === PRODUCT
-                                    ? { color: "#452CDD" }
-                                    : { color: "#000000" }
-                            }
-                        >
-                            {item.type === PRODUCT
-                                ? ` ${item.discountPercentage}%`
-                                : "관심고객수"}
-                        </strong>
-                        <p>
-                            {item.type === PRODUCT
-                                ? `${Number(item.price).toLocaleString(
-                                      "ko-KR"
-                                  )}원`
-                                : item.follower.toLocaleString("ko-KR")}
-                        </p>
-                    </div>
-                )}
-            </div>
+        <>
             {isVisible && (
                 <Modal
                     type={item.type}
@@ -134,7 +73,76 @@ const ProductItem = ({ item, bookmarkLists, setBookmarkLists }) => {
                     handleToggleBookmark={handleToggleBookmark}
                 />
             )}
-        </li>
+            <li className={styles["product-list"]} onClick={handleShowModal}>
+                <div
+                    className={styles["img-area"]}
+                    title={item.title}
+                    style={{
+                        background: `url(${
+                            item.image_url
+                                ? item.image_url
+                                : item.brand_image_url
+                        }) no-repeat center`,
+                        backgroundSize: "cover",
+                    }}
+                >
+                    <button
+                        type="button"
+                        className={styles.bookmark}
+                        onClick={(e) => {
+                            handleToggleBookmark(e);
+                            // showToast(isBookmarked);
+                            // setToast(!isBookmarked);
+                            // !isBookmarked ? showToast("on") : showToast("off");
+                        }}
+                    >
+                        <StarIcon
+                            width={24}
+                            height={24}
+                            fill={
+                                isBookmarked
+                                    ? "#ffd361"
+                                    : "rgba(223, 223, 223, 0.81)"
+                            }
+                        />
+                    </button>
+                </div>
+                <div className={styles["dec-area"]}>
+                    <div className={styles["dec-left"]}>
+                        <h3>
+                            {item.type === CATEGORY
+                                ? "# " + item.title
+                                : item.type === BRAND
+                                ? item.brand_name
+                                : item.title}
+                        </h3>
+                        <p>{item.type === EXHIBITION ? item.sub_title : ""}</p>
+                    </div>
+                    {(item.type === PRODUCT || item.type === BRAND) && (
+                        <div className={styles["dec-right"]}>
+                            <strong
+                                style={
+                                    item.type === PRODUCT
+                                        ? { color: "#452CDD" }
+                                        : { color: "#000000" }
+                                }
+                            >
+                                {item.type === PRODUCT
+                                    ? ` ${item.discountPercentage}%`
+                                    : "관심고객수"}
+                            </strong>
+                            <p>
+                                {item.type === PRODUCT
+                                    ? `${Number(item.price).toLocaleString(
+                                          "ko-KR"
+                                      )}원`
+                                    : item.follower.toLocaleString("ko-KR")}
+                            </p>
+                        </div>
+                    )}
+                </div>
+            </li>
+        </>
     );
 };
 

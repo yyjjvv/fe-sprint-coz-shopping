@@ -3,7 +3,7 @@ import ProductItem from "./ProductItem";
 // styles
 import styles from "./BookmarkLists.module.css";
 
-const BookmarkLists = ({ bookmarkLists, setBookmarkLists }) => {
+const BookmarkLists = ({ bookmarkLists, setBookmarkLists, showToast }) => {
     return (
         <section class={styles["bookmark-lists"]}>
             <h2>북마크 리스트</h2>
@@ -17,6 +17,7 @@ const BookmarkLists = ({ bookmarkLists, setBookmarkLists }) => {
                                 item={item}
                                 bookmarkLists={bookmarkLists}
                                 setBookmarkLists={setBookmarkLists}
+                                showToast={showToast}
                             />
                         ))
                 ) : (
