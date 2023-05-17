@@ -1,16 +1,9 @@
 import { useState, useEffect } from "react";
-// dependencies
-import styled from "styled-components";
 // components
 import ProductLists from "../components/ProductLists";
 import BookmarkLists from "../components/BookmarkLists";
-
-export const MainContainer = styled.main`
-    width: 100%;
-    max-width: 128rem;
-    margin: 8rem auto 0;
-    padding: 2.4rem 8rem;
-`;
+// styles
+import styles from "./Container.module.css";
 
 const Main = ({ bookmarkLists, setBookmarkLists }) => {
     const [productLists, setProductLists] = useState([]);
@@ -37,7 +30,7 @@ const Main = ({ bookmarkLists, setBookmarkLists }) => {
     }, []);
 
     return (
-        <MainContainer>
+        <main id={styles["main"]}>
             <ProductLists
                 productLists={productLists}
                 bookmarkLists={bookmarkLists}
@@ -47,7 +40,7 @@ const Main = ({ bookmarkLists, setBookmarkLists }) => {
                 bookmarkLists={bookmarkLists}
                 setBookmarkLists={setBookmarkLists}
             />
-        </MainContainer>
+        </main>
     );
 };
 

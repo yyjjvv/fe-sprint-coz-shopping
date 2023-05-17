@@ -1,20 +1,7 @@
-// dependencies
-import styled from "styled-components";
 // components
 import ProductItem from "./ProductItem";
-
-export const ListsContainer = styled.section`
-    h2 {
-        margin-bottom: 1.2rem;
-        font-size: 2.4rem;
-        font-weight: 600;
-        line-height: 1.25;
-    }
-    ul {
-        display: flex;
-        /* justify-content: space-between; */
-    }
-`;
+// styles
+import styles from "./ProductLists.module.css";
 
 const ProductLists = ({ productLists, bookmarkLists, setBookmarkLists }) => {
     const handleBookmark = (item) => {
@@ -26,7 +13,7 @@ const ProductLists = ({ productLists, bookmarkLists, setBookmarkLists }) => {
     };
 
     return (
-        <ListsContainer>
+        <section className={styles["product-lists"]}>
             <h2>상품 리스트</h2>
             <ul>
                 {productLists.map((item) => (
@@ -39,7 +26,7 @@ const ProductLists = ({ productLists, bookmarkLists, setBookmarkLists }) => {
                     />
                 ))}
             </ul>
-        </ListsContainer>
+        </section>
     );
 };
 

@@ -1,5 +1,12 @@
+// styles
+import styles from "./Container.module.css";
+
 const ProductsList = () => {
-    return <div>ProductsList</div>;
+    return (
+        <main main id={styles["main"]}>
+            ProductsList
+        </main>
+    );
 };
 
 export default ProductsList;

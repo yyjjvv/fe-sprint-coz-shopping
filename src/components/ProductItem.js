@@ -1,57 +1,10 @@
 import { useState, useEffect } from "react";
 // dependencies
-import styled from "styled-components";
 import { StarIcon } from "@heroicons/react/24/solid";
-
+// components
 import Modal from "./UI/Modal";
-
-export const ItemContainer = styled.li`
-    width: calc((100% - 7.2rem) / 4);
-    &:not(:first-of-type) {
-        margin-left: 2.4rem;
-    }
-    .img-area {
-        position: relative;
-        height: 21rem;
-        min-height: 21rem;
-        border-radius: 1.2rem;
-    }
-    .bookmark {
-        position: absolute;
-        bottom: 12px;
-        right: 12px;
-        cursor: pointer;
-    }
-
-    .dec-area {
-        display: flex;
-        justify-content: space-between;
-    }
-    .dec-left {
-        h3 {
-            margin-top: 0.6rem;
-            font-size: 1.6rem;
-            font-weight: 800;
-            line-height: 1.2;
-        }
-        p {
-            font-size: 1.6rem;
-            line-height: 1.2;
-        }
-    }
-    .dec-right {
-        text-align: end;
-        strong {
-            font-size: 1.6rem;
-            font-weight: 700;
-            line-height: 1.2;
-        }
-        p {
-            font-size: 1.6rem;
-            line-height: 1.2;
-        }
-    }
-`;
+// styles
+import styles from "./ProductItem.module.css";
 
 const ProductItem = ({ item, bookmarkLists, setBookmarkLists }) => {
     const [isBookmarked, setIsBookmarked] = useState(false);
@@ -107,9 +60,9 @@ const ProductItem = ({ item, bookmarkLists, setBookmarkLists }) => {
     }, [bookmarkLists, item.id]);
 
     return (
-        <ItemContainer onClick={handleShowModal}>
+        <li className={styles["product-list"]} onClick={handleShowModal}>
             <div
-                className="img-area"
+                className={styles["img-area"]}
                 title={item.title}
                 style={{
                     background: `url(${
@@ -120,7 +73,7 @@ const ProductItem = ({ item, bookmarkLists, setBookmarkLists }) => {
             >
                 <button
                     type="button"
-                    className="bookmark"
+                    className={styles.bookmark}
                     onClick={(e) => {
                         handleToggleBookmark(e);
                     }}
@@ -136,8 +89,8 @@ const ProductItem = ({ item, bookmarkLists, setBookmarkLists }) => {
                     />
                 </button>
             </div>
-            <div className="dec-area">
-                <div className="dec-left">
+            <div className={styles["dec-area"]}>
+                <div className={styles["dec-left"]}>
                     <h3>
                         {item.type === CATEGORY
                             ? "# " + item.title
@@ -148,7 +101,7 @@ const ProductItem = ({ item, bookmarkLists, setBookmarkLists }) => {
                     <p>{item.type === EXHIBITION ? item.sub_title : ""}</p>
                 </div>
                 {(item.type === PRODUCT || item.type === BRAND) && (
-                    <div className="dec-right">
+                    <div className={styles["dec-right"]}>
                         <strong
                             style={
                                 item.type === PRODUCT
@@ -181,7 +134,7 @@ const ProductItem = ({ item, bookmarkLists, setBookmarkLists }) => {
                     handleToggleBookmark={handleToggleBookmark}
                 />
             )}
-        </ItemContainer>
+        </li>
     );
 };
 
