@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 // dependencies
 import styled from "styled-components";
 import { StarIcon } from "@heroicons/react/24/solid";
+
+import Modal from "./UI/Modal";
 
 export const ItemContainer = styled.li`
     width: calc((100% - 7.2rem) / 4);
@@ -14,10 +16,11 @@ export const ItemContainer = styled.li`
         min-height: 21rem;
         border-radius: 1.2rem;
     }
-    button {
+    .bookmark {
         position: absolute;
         bottom: 12px;
         right: 12px;
+        cursor: pointer;
     }
 
     .dec-area {
@@ -50,39 +53,85 @@ export const ItemContainer = styled.li`
     }
 `;
 
-const ProductItem = (props) => {
-    const [bookmark, setBookmark] = useState(props.bookmark);
+const ProductItem = ({ item, bookmarkLists, setBookmarkLists }) => {
+    const [isBookmarked, setIsBookmarked] = useState(false);
+    const [isVisible, setIsVisible] = useState(false);
+
+    console.log(bookmarkLists);
+
+    const Type = {
+        PRODUCT: "Product",
+        CATEGORY: "Category",
+        EXHIBITION: "Exhibition",
+        BRAND: "Brand",
+    };
+
+    const { PRODUCT, CATEGORY, EXHIBITION, BRAND } = Type;
+
+    const handleShowModal = () => {
+        setIsVisible(true);
+    };
+
+    const handleCloseModal = (e) => {
+        e.stopPropagation();
+        setIsVisible(false);
+    };
+
+    const handleToggleBookmark = (e) => {
+        e.stopPropagation();
+        setIsBookmarked((prev) => !prev);
+        const bookmark = bookmarkLists || [];
+        const isExistingItem =
+            bookmark.findIndex((data) => data.id === item.id) !== -1;
+        if (!isExistingItem) {
+            setBookmarkLists([...bookmark, item]);
+        } else {
+            setBookmarkLists(
+                bookmark.filter((data) => {
+                    return data.id !== item.id;
+                })
+            );
+        }
+    };
+
+    useEffect(() => {
+        const bookmark = bookmarkLists || [];
+        const isExistingItem =
+            bookmark.findIndex((data) => data.id === item.id) !== -1;
+        if (!isExistingItem) {
+            setIsBookmarked(false);
+        } else {
+            setIsBookmarked(true);
+        }
+        localStorage.setItem("bookmarkLists", JSON.stringify(bookmarkLists));
+    }, [bookmarkLists, item.id]);
 
     return (
-        <ItemContainer>
+        <ItemContainer onClick={handleShowModal}>
             <div
                 className="img-area"
-                title={props.title}
+                title={item.title}
                 style={{
                     background: `url(${
-                        props.imgUrl ? props.imgUrl : props.brandImgUrl
+                        item.image_url ? item.image_url : item.brand_image_url
                     }) no-repeat center`,
                     backgroundSize: "cover",
                 }}
             >
                 <button
                     type="button"
-                    onClick={() => {
-                        setBookmark((prev) => !prev);
-                        props.setProducts((prevState) =>
-                            prevState.map((item) =>
-                                item.id === props.id
-                                    ? { ...item, bookmark: !item.bookmark }
-                                    : item
-                            )
-                        );
+                    className="bookmark"
+                    onClick={(e) => {
+                        handleToggleBookmark(e);
                     }}
                 >
                     <StarIcon
                         width={24}
                         height={24}
                         fill={
-                            bookmark ? "#ffd361" : "rgba(223, 223, 223, 0.81)"
+                            isBookmarked
+                                ? "#ffd361"
+                                : "rgba(223, 223, 223, 0.81)"
                         }
                     />
                 </button>
@@ -90,37 +139,48 @@ const ProductItem = (props) => {
             <div className="dec-area">
                 <div className="dec-left">
                     <h3>
-                        {props.type === "Category"
-                            ? "# " + props.title
-                            : props.type === "Brand"
-                            ? props.brandName
-                            : props.title}
+                        {item.type === CATEGORY
+                            ? "# " + item.title
+                            : item.type === BRAND
+                            ? item.brand_name
+                            : item.title}
                     </h3>
-                    <p>{props.type === "Exhibition" ? props.subTitle : ""}</p>
+                    <p>{item.type === EXHIBITION ? item.sub_title : ""}</p>
                 </div>
-                {(props.type === "Product" || props.type === "Brand") && (
+                {(item.type === PRODUCT || item.type === BRAND) && (
                     <div className="dec-right">
                         <strong
                             style={
-                                props.type === "Product"
+                                item.type === PRODUCT
                                     ? { color: "#452CDD" }
                                     : { color: "#000000" }
                             }
                         >
-                            {props.type === "Product"
-                                ? ` ${props.discountPercentage}%`
+                            {item.type === PRODUCT
+                                ? ` ${item.discountPercentage}%`
                                 : "관심고객수"}
                         </strong>
                         <p>
-                            {props.type === "Product"
-                                ? `${Number(props.price).toLocaleString(
+                            {item.type === PRODUCT
+                                ? `${Number(item.price).toLocaleString(
                                       "ko-KR"
                                   )}원`
-                                : props.follower.toLocaleString("ko-KR")}
+                                : item.follower.toLocaleString("ko-KR")}
                         </p>
                     </div>
                 )}
             </div>
+            {isVisible && (
+                <Modal
+                    type={item.type}
+                    title={item.title || item.brand_name}
+                    imgUrl={item.image_url || item.brand_image_url}
+                    handleCloseModal={handleCloseModal}
+                    isBookmarked={isBookmarked}
+                    setIsBookmarked={setIsBookmarked}
+                    handleToggleBookmark={handleToggleBookmark}
+                />
+            )}
         </ItemContainer>
     );
 };
