@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+// dependencies
+import axios from "axios";
 // components
 import ProductLists from "../components/ProductLists";
 import BookmarkLists from "../components/BookmarkLists";
@@ -38,24 +40,31 @@ const Main = ({ bookmarkLists, setBookmarkLists }) => {
     };
 
     useEffect(() => {
-        fetch("http://cozshopping.codestates-seb.link/api/v1/products?count=4")
-            .then((response) => {
-                if (!response.ok) {
-                    throw new Error(response.statusText);
-                }
-                return response.json();
-            })
-            .then((data) => {
-                setIsLoading(true);
-                setProductLists(data);
+        setIsLoading(true);
+        axios
+            .get(
+                "http://cozshopping.codestates-seb.link/api/v1/products?count=4"
+            )
+            .then((res) => {
+                setProductLists(res.data);
                 setIsLoading(false);
-            })
-            .catch((error) => console.error(error));
-        // .then((res) => res.json())
-        // .then((data) => {
-        //     setProductLists(data);
-        // });
+            });
     }, []);
+    // useEffect(() => {
+    //     fetch("http://cozshopping.codestates-seb.link/api/v1/products?count=4")
+    //         .then((response) => {
+    //             if (!response.ok) {
+    //                 throw new Error(response.statusText);
+    //             }
+    //             return response.json();
+    //         })
+    //         .then((data) => {
+    //             setIsLoading(true);
+    //             setProductLists(data);
+    //             setIsLoading(false);
+    //         })
+    //         .catch((error) => console.error(error));
+    // }, []);
 
     return (
         <main id={styles["main"]}>

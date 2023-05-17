@@ -12,12 +12,12 @@ const ProductItem = ({ item, bookmarkLists, setBookmarkLists, showToast }) => {
 
     console.log(bookmarkLists);
 
-    const Type = {
+    const Type = Object.freeze({
         PRODUCT: "Product",
         CATEGORY: "Category",
         EXHIBITION: "Exhibition",
         BRAND: "Brand",
-    };
+    });
 
     const { PRODUCT, CATEGORY, EXHIBITION, BRAND } = Type;
 
@@ -91,9 +91,6 @@ const ProductItem = ({ item, bookmarkLists, setBookmarkLists, showToast }) => {
                         className={styles.bookmark}
                         onClick={(e) => {
                             handleToggleBookmark(e);
-                            // showToast(isBookmarked);
-                            // setToast(!isBookmarked);
-                            // !isBookmarked ? showToast("on") : showToast("off");
                         }}
                     >
                         <StarIcon

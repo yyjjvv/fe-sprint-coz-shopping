@@ -11,7 +11,9 @@ import "./App.css";
 
 const App = () => {
     const getBookmark = JSON.parse(localStorage.getItem("bookmarkLists"));
-    const [bookmarkLists, setBookmarkLists] = useState(getBookmark);
+    const [bookmarkLists, setBookmarkLists] = useState(
+        getBookmark === null ? [] : getBookmark
+    );
 
     return (
         <BrowserRouter>
