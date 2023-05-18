@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 // components
 import ProductItem from "../components/ProductItem";
 import ToastLists from "../components/ToastLists";
@@ -14,8 +14,13 @@ import styles from "./Container.module.css";
 const Bookmark = ({ bookmarkLists, setBookmarkLists }) => {
     const [selectedType, setSelectedType] = useState("All");
     const [filteredLists, setFilteredLists] = useState([]);
-    // const [isLoading, setIsLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(true);
     const [toastLists, setToastLists] = useState([]);
+
+    const [page, setPage] = useState(1);
+    const target = useRef(null);
+    const preventRef = useRef(true);
+
     let toastProperties = null;
 
     const categories = [
@@ -25,6 +30,72 @@ const Bookmark = ({ bookmarkLists, setBookmarkLists }) => {
         { id: 4, imgUrl: imgExhibition, name: "기획전", type: "Exhibition" },
         { id: 5, imgUrl: imgBrand, name: "브랜드", type: "Brand" },
     ];
+
+    const callback = (entries) => {
+        //옵저버 콜백함수
+        const target = entries[0];
+        if (target.isIntersecting && preventRef.current) {
+            preventRef.current = false; //옵저버 중복 실행 방지
+            setPage((prev) => prev + 1); //페이지 값 증가
+        }
+    };
+    const observer = new IntersectionObserver(callback, {
+        threshold: 1.0,
+    });
+
+    useEffect(() => {
+        if (target.current) observer.observe(target.current);
+        return () => {
+            observer.disconnect();
+        };
+    }, []);
+
+    useEffect(() => {
+        setFilteredLists(bookmarkLists.slice(0, 16));
+        setPage(1);
+    }, [bookmarkLists]);
+
+    useEffect(() => {
+        setFilteredLists(
+            bookmarkLists
+                .filter((item) =>
+                    selectedType === "All" ? true : item.type === selectedType
+                )
+                .slice(0, 16)
+        );
+        setPage(1);
+    }, [selectedType]);
+
+    useEffect(() => {
+        if (page !== 1) {
+            getPost();
+        }
+    }, [page]);
+
+    const timeoutRef = useRef(null);
+
+    const getPost = () => {
+        setIsLoading(true);
+        // 이전에 예약된 setTimeout이 있으면 취소
+        if (timeoutRef.current) {
+            clearTimeout(timeoutRef.current);
+        }
+        // 1초 후에 setShowData를 실행하는 setTimeout 예약
+        timeoutRef.current = setTimeout(() => {
+            setFilteredLists((prev) => [
+                ...prev,
+                ...bookmarkLists
+                    .filter((item) =>
+                        selectedType === "All"
+                            ? true
+                            : item.type === selectedType
+                    )
+                    .slice((page - 1) * 16, page * 16),
+            ]);
+            preventRef.current = true;
+            setIsLoading(false);
+        }, 500);
+    };
 
     const showToast = (boolean) => {
         switch (boolean) {
@@ -50,13 +121,14 @@ const Bookmark = ({ bookmarkLists, setBookmarkLists }) => {
         setToastLists([...toastLists, toastProperties]);
     };
 
-    useEffect(() => {
-        setFilteredLists(
-            bookmarkLists.filter((item) =>
-                selectedType === "All" ? true : item.type === selectedType
-            )
-        );
-    }, [selectedType, bookmarkLists]);
+    // infinite scroll 적용 전
+    // useEffect(() => {
+    //     setFilteredLists(
+    //         bookmarkLists.filter((item) =>
+    //             selectedType === "All" ? true : item.type === selectedType
+    //         )
+    //     );
+    // }, [selectedType, bookmarkLists]);
 
     return (
         <main id={styles["main"]}>
@@ -91,6 +163,7 @@ const Bookmark = ({ bookmarkLists, setBookmarkLists }) => {
                     />
                 ))}
             </ul>
+            <div ref={target}></div>
             <ToastLists toastLists={toastLists} setToastLists={setToastLists} />
         </main>
     );

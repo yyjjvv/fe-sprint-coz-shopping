@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 // dependencies
 import axios from "axios";
 // componenets
@@ -21,6 +21,11 @@ const ProductsList = ({ bookmarkLists, setBookmarkLists }) => {
     const [filteredLists, setFilteredLists] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [toastLists, setToastLists] = useState([]);
+
+    const [page, setPage] = useState(1);
+    const target = useRef(null);
+    const preventRef = useRef(true);
+
     let toastProperties = null;
 
     const categories = [
@@ -55,31 +60,100 @@ const ProductsList = ({ bookmarkLists, setBookmarkLists }) => {
         setToastLists([...toastLists, toastProperties]);
     };
 
+    const callback = (entries) => {
+        //옵저버 콜백함수
+        const target = entries[0];
+        if (target.isIntersecting && preventRef.current) {
+            preventRef.current = false; //옵저버 중복 실행 방지
+            setPage((prev) => prev + 1); //페이지 값 증가
+        }
+    };
+    const observer = new IntersectionObserver(callback, {
+        threshold: 1.0,
+    });
+
     useEffect(() => {
-        setIsLoading(true);
         axios
             .get("http://cozshopping.codestates-seb.link/api/v1/products")
             .then((res) => {
                 setProductLists(res.data);
-                setIsLoading(false);
+            })
+            .then(() => {
+                if (target.current) observer.observe(target.current);
+                return () => {
+                    observer.disconnect();
+                };
             });
     }, []);
 
     useEffect(() => {
+        setFilteredLists(productLists.slice(0, 16));
+        setPage(1);
+    }, [productLists]);
+
+    useEffect(() => {
         setFilteredLists(
-            productLists.filter((item) =>
-                selectedType === "All" ? true : item.type === selectedType
-            )
+            productLists
+                .filter((item) =>
+                    selectedType === "All" ? true : item.type === selectedType
+                )
+                .slice(0, 16)
         );
-    }, [selectedType, productLists]);
+        setPage(1);
+    }, [selectedType]);
+
+    useEffect(() => {
+        if (page !== 1) {
+            getPost();
+        }
+    }, [page]);
+
+    const timeoutRef = useRef(null);
+
+    const getPost = () => {
+        setIsLoading(true);
+        // 이전에 예약된 setTimeout이 있으면 취소
+        if (timeoutRef.current) {
+            clearTimeout(timeoutRef.current);
+        }
+        // 1초 후에 setShowData를 실행하는 setTimeout 예약
+        timeoutRef.current = setTimeout(() => {
+            setFilteredLists((prev) => [
+                ...prev,
+                ...productLists
+                    .filter((item) =>
+                        selectedType === "All"
+                            ? true
+                            : item.type === selectedType
+                    )
+                    .slice((page - 1) * 16, page * 16),
+            ]);
+            preventRef.current = true;
+            setIsLoading(false);
+        }, 500);
+    };
+
+    // infinite scroll 적용 전
+    // useEffect(() => {
+    //     setIsLoading(true);
+    //     axios
+    //         .get("http://cozshopping.codestates-seb.link/api/v1/products")
+    //         .then((res) => {
+    //             setProductLists(res.data);
+    //             setIsLoading(false);
+    //         });
+    // }, []);
+
+    // useEffect(() => {
+    //     setFilteredLists(
+    //         productLists.filter((item) =>
+    //             selectedType === "All" ? true : item.type === selectedType
+    //         )
+    //     );
+    // }, [selectedType, productLists]);
 
     return (
         <main id={styles["main"]}>
-            {/* <Category
-                categories={categories}
-                selectedType={selectedType}
-                handleCategoryFilter={handleCategoryFilter}
-            /> */}
             <ul className={styles["category-container"]}>
                 {categories.map((filter) => (
                     <li
@@ -98,14 +172,6 @@ const ProductsList = ({ bookmarkLists, setBookmarkLists }) => {
                             {filter.name}
                         </span>
                     </li>
-                    // <CategoryItem
-                    //     onClick={() => setSelectedType(filter.type)}
-                    //     key={filter.id}
-                    //     imgUrl={filter.imgUrl}
-                    //     name={filter.name}
-                    //     type={filter.type}
-                    //     selectedType={selectedType}
-                    // />
                 ))}
             </ul>
             <ul className={styles["products-list"]}>
@@ -119,11 +185,8 @@ const ProductsList = ({ bookmarkLists, setBookmarkLists }) => {
                     />
                 ))}
             </ul>
-            <ToastLists
-                // toast={toast}
-                toastLists={toastLists}
-                setToastLists={setToastLists}
-            />
+            <div ref={target}></div>
+            <ToastLists toastLists={toastLists} setToastLists={setToastLists} />
         </main>
     );
 };
