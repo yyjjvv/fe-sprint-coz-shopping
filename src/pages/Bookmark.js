@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 // components
 import ProductItem from "../components/ProductItem";
 import ToastLists from "../components/ToastLists";
+import LoadingSkeleton from "../components/UI/LoadingSkeleton";
 // assets
 import imgAll from "../assets/category_all.png";
 import imgProduct from "../assets/category_product.png";
@@ -164,6 +165,7 @@ const Bookmark = ({ bookmarkLists, setBookmarkLists }) => {
                 ))}
             </ul>
             <div ref={target}></div>
+            {isLoading && <LoadingSkeleton />}
             <ToastLists toastLists={toastLists} setToastLists={setToastLists} />
         </main>
     );

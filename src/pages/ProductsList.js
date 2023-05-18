@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef } from "react";
 // dependencies
 import axios from "axios";
 // componenets
@@ -6,6 +6,7 @@ import axios from "axios";
 // import CategoryItem from "../components/CategoryItem";
 import ProductItem from "../components/ProductItem";
 import ToastLists from "../components/ToastLists";
+import LoadingSkeleton from "../components/UI/LoadingSkeleton";
 // assets
 import imgAll from "../assets/category_all.png";
 import imgProduct from "../assets/category_product.png";
@@ -186,6 +187,7 @@ const ProductsList = ({ bookmarkLists, setBookmarkLists }) => {
                 ))}
             </ul>
             <div ref={target}></div>
+            {isLoading && <LoadingSkeleton />}
             <ToastLists toastLists={toastLists} setToastLists={setToastLists} />
         </main>
     );

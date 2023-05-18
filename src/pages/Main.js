@@ -6,6 +6,7 @@ import ProductLists from "../components/ProductLists";
 import BookmarkLists from "../components/BookmarkLists";
 import EmptyBookmark from "../components/EmptyBookmark";
 import ToastLists from "../components/ToastLists";
+import LoadingSkeleton from "../components/UI/LoadingSkeleton";
 // styles
 import styles from "./Container.module.css";
 
@@ -68,12 +69,15 @@ const Main = ({ bookmarkLists, setBookmarkLists }) => {
 
     return (
         <main id={styles["main"]}>
+            <h2>상품 리스트</h2>
             <ProductLists
                 productLists={productLists}
                 bookmarkLists={bookmarkLists}
                 setBookmarkLists={setBookmarkLists}
                 showToast={showToast}
             />
+            {isLoading && <LoadingSkeleton />}
+            <h2>북마크 리스트</h2>
             {bookmarkLists.length !== 0 ? (
                 <BookmarkLists
                     bookmarkLists={bookmarkLists}
@@ -84,11 +88,7 @@ const Main = ({ bookmarkLists, setBookmarkLists }) => {
                 <EmptyBookmark />
             )}
 
-            <ToastLists
-                // toast={toast}
-                toastLists={toastLists}
-                setToastLists={setToastLists}
-            />
+            <ToastLists toastLists={toastLists} setToastLists={setToastLists} />
         </main>
     );
 };

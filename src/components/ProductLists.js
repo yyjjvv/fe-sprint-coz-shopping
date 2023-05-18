@@ -19,7 +19,7 @@ const ProductLists = ({
 
     return (
         <section className={styles["product-lists"]}>
-            <h2>상품 리스트</h2>
+            {/* <h2>상품 리스트</h2> */}
             <ul>
                 {productLists.map((item) => (
                     <ProductItem
