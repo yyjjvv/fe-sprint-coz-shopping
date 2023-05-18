@@ -10,8 +10,6 @@ const ProductItem = ({ item, bookmarkLists, setBookmarkLists, showToast }) => {
     const [isBookmarked, setIsBookmarked] = useState(false);
     const [isVisible, setIsVisible] = useState(false);
 
-    console.log(bookmarkLists);
-
     const Type = Object.freeze({
         PRODUCT: "Product",
         CATEGORY: "Category",
@@ -23,11 +21,13 @@ const ProductItem = ({ item, bookmarkLists, setBookmarkLists, showToast }) => {
 
     const handleShowModal = () => {
         setIsVisible(true);
+        document.body.style.overflow = "hidden";
     };
 
     const handleCloseModal = (e) => {
         e.stopPropagation();
         setIsVisible(false);
+        document.body.style.overflow = "auto";
     };
 
     const handleToggleBookmark = (e) => {

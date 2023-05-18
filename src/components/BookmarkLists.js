@@ -5,7 +5,7 @@ import styles from "./BookmarkLists.module.css";
 
 const BookmarkLists = ({ bookmarkLists, setBookmarkLists, showToast }) => {
     return (
-        <section class={styles["bookmark-lists"]}>
+        <section className={styles["bookmark-lists"]}>
             <h2>북마크 리스트</h2>
             <ul>
                 {bookmarkLists && bookmarkLists.length !== 0 ? (
