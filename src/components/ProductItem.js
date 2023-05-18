@@ -45,6 +45,7 @@ const ProductItem = ({ item, bookmarkLists, setBookmarkLists, showToast }) => {
                     return data.id !== item.id;
                 })
             );
+            document.body.style.overflow = "auto";
         }
     };
 

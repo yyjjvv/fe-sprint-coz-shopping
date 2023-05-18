@@ -2,8 +2,8 @@ import { useState, useEffect } from "react";
 // dependencies
 import axios from "axios";
 // componenets
-import Category from "../components/Category";
-import CategoryItem from "../components/CategoryItem";
+// import Category from "../components/Category";
+// import CategoryItem from "../components/CategoryItem";
 import ProductItem from "../components/ProductItem";
 import ToastLists from "../components/ToastLists";
 // assets
