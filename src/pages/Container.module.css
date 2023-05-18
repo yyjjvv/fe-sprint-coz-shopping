@@ -1,0 +1,52 @@
+#main {
+    position: relative;
+    width: 100%;
+    max-width: 128rem;
+    margin: 8rem auto 0;
+    padding: 2.4rem 8rem;
+}
+
+#main h2 {
+    margin-bottom: 1.2rem;
+    font-size: 2.4rem;
+    font-weight: 600;
+    line-height: 1.25;
+}
+
+.products-list,
+.bookmark {
+    display: flex;
+    flex-wrap: wrap;
+    list-style: none;
+}
+
+.category-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 2.7rem;
+}
+
+.category-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 1.8rem;
+    cursor: pointer;
+}
+
+.category-item img {
+    display: block;
+    width: 8.2rem;
+    margin-bottom: 6.5px;
+}
+
+.category-item span {
+    font-size: 1.6rem;
+    line-height: 1.25;
+}
+
+.category-item span.active {
+    color: #412dd4;
+    font-weight: 700;
+    border-bottom: 3px solid #412dd4;
+}

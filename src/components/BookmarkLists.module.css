@@ -1,0 +1,15 @@
+.bookmark-lists {
+    margin-top: 1.2rem;
+}
+
+.bookmark-lists h2 {
+    margin-bottom: 1.2rem;
+    font-size: 2.4rem;
+    font-weight: 600;
+    line-height: 1.25;
+}
+
+.bookmark-lists ul {
+    display: flex;
+    list-style: none;
+}
