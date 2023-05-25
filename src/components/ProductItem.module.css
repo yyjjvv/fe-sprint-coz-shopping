@@ -1,0 +1,53 @@
+.product-list {
+    width: calc((100% - 7.2rem) / 4);
+    margin-bottom: 1.2rem;
+}
+
+.product-list:not(:nth-of-type(4n - 3)) {
+    margin-left: 2.4rem;
+}
+
+.product-list .img-area {
+    position: relative;
+    height: 21rem;
+    min-height: 21rem;
+    border-radius: 1.2rem;
+}
+
+.product-list .bookmark {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    cursor: pointer;
+}
+
+.dec-area {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 0.6rem;
+}
+
+.dec-left h3 {
+    font-size: 1.6rem;
+    font-weight: 800;
+    line-height: 1.2;
+}
+
+.dec-left p {
+    font-size: 1.6rem;
+    line-height: 1.2;
+}
+
+.dec-right {
+    text-align: end;
+}
+
+.dec-right strong {
+    font-size: 1.6rem;
+    font-weight: 700;
+    line-height: 1.2;
+}
+.dec-right p {
+    font-size: 1.6rem;
+    line-height: 1.2;
+}

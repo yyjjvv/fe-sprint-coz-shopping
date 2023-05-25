@@ -1,0 +1,17 @@
+.empty-bookmark {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 6rem 0;
+}
+
+.empty-bookmark svg {
+    stroke: #412dd4;
+}
+
+.empty-bookmark h2 {
+    margin-top: 2rem;
+    color: #412dd4;
+    font-size: 2.4rem;
+    font-weight: 700;
+}
