@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 // components
-import Header from "./components/Layout/Header";
-import Footer from "./components/Layout/Footer";
+import Header from "./common/components/Header/Header";
+import Footer from "./common/components/Footer/Footer";
+// import Header from "./components/Layout/Header";
+// import Footer from "./components/Layout/Footer";
 import Main from "./pages/Main";
 import ProductsList from "./pages/ProductsList";
 import Bookmark from "./pages/Bookmark";

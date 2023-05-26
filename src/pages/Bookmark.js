@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 // components
 import ProductItem from "../components/ProductItem";
 import ToastLists from "../components/ToastLists";
-import LoadingSkeleton from "../components/UI/LoadingSkeleton";
+import LoadingSkeleton from "../common/components/LoadingSkeleton/LoadingSkeleton";
 // assets
 import imgAll from "../assets/category_all.png";
 import imgProduct from "../assets/category_product.png";
