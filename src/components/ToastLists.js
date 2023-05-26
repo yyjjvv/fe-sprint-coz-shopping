@@ -1,6 +1,6 @@
 import { useEffect, useCallback } from "react";
 
-import Toast from "./UI/Toast";
+import Toast from "../common/components/Toast/Toast";
 
 import styles from "./ToastLists.module.css";
 

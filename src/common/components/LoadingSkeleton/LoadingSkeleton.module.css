@@ -1,5 +1,6 @@
 .skeleton-container {
     display: flex;
+    list-style: none;
 }
 
 .skeleton-list {
@@ -11,14 +12,13 @@
     margin-left: 2.4rem;
 }
 
-.skeleton.img {
+.skeleton-list > div {
     width: 100%;
     height: 21rem;
     border-radius: 1.2rem;
 }
 
-.skeleton.title,
-.skeleton.dec {
+.skeleton-list > p {
     width: 100%;
     height: 1.6rem;
     margin-top: 0.6rem;

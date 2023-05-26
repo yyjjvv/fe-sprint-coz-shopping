@@ -2,11 +2,9 @@ import { useState, useEffect, useRef } from "react";
 // dependencies
 import axios from "axios";
 // componenets
-// import Category from "../components/Category";
-// import CategoryItem from "../components/CategoryItem";
 import ProductItem from "../components/ProductItem";
 import ToastLists from "../components/ToastLists";
-import LoadingSkeleton from "../components/UI/LoadingSkeleton";
+import LoadingSkeleton from "../common/components/LoadingSkeleton/LoadingSkeleton";
 // assets
 import imgAll from "../assets/category_all.png";
 import imgProduct from "../assets/category_product.png";

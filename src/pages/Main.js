@@ -4,9 +4,9 @@ import axios from "axios";
 // components
 import ProductLists from "../components/ProductLists";
 import BookmarkLists from "../components/BookmarkLists";
-import EmptyBookmark from "../components/EmptyBookmark";
+import EmptyBookmark from "../common/components/EmptyBookmark/EmptyBookmark";
 import ToastLists from "../components/ToastLists";
-import LoadingSkeleton from "../components/UI/LoadingSkeleton";
+import LoadingSkeleton from "../common/components/LoadingSkeleton/LoadingSkeleton";
 // styles
 import styles from "./Container.module.css";
 

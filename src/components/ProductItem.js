@@ -2,20 +2,22 @@ import { useState, useEffect } from "react";
 // dependencies
 import { StarIcon } from "@heroicons/react/24/solid";
 // components
-import Modal from "./UI/Modal";
+import Modal from "../common/components/Modal/Modal";
 // styles
 import styles from "./ProductItem.module.css";
+// enums
+import { Type } from "../common/enums/list-type";
 
 const ProductItem = ({ item, bookmarkLists, setBookmarkLists, showToast }) => {
     const [isBookmarked, setIsBookmarked] = useState(false);
     const [isVisible, setIsVisible] = useState(false);
 
-    const Type = Object.freeze({
-        PRODUCT: "Product",
-        CATEGORY: "Category",
-        EXHIBITION: "Exhibition",
-        BRAND: "Brand",
-    });
+    // const Type = Object.freeze({
+    //     PRODUCT: "Product",
+    //     CATEGORY: "Category",
+    //     EXHIBITION: "Exhibition",
+    //     BRAND: "Brand",
+    // });
 
     const { PRODUCT, CATEGORY, EXHIBITION, BRAND } = Type;
 
